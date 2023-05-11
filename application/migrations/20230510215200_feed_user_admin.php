@@ -9,6 +9,7 @@ class Migration_Feed_user_admin extends CI_Migration
 	{
 		$this->db->insert('users', [
 			'id_user' => 1,
+			'login' => 'admin',
 			'name' => 'Administrador',
 			'id_company' => 1,
 			'active' => 1,

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Companies_model extends CI_Model
+class Companies_model extends MY_Model
 {
 	protected $table = 'companies';
 	protected $primaryKey = 'id_company';
