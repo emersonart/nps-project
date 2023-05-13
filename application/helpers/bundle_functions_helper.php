@@ -73,12 +73,10 @@ if (!function_exists('set_msg')) {
 		$ci = &get_instance();
 		$extra = $dis = '';
 		if ($msg == NULL) {
-			$ci->session->set_userdata('aviso', $msg);
+			$ci->session->set_userdata('alert-eth', $msg);
 		} else {
 			if ($dismiss) {
-				$extra = '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						    <span aria-hidden="true">&times;</span>
-						  </button>';
+				$extra = '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
 				$dis = 'alert-dismissible';
 			}
 			if ($icon) {
@@ -111,6 +109,9 @@ if (!function_exists('is_authenticated')) {
 		if ($ci->session->userdata($key) && $ci->session->userdata($key)['logged']) {
 
 			return TRUE;
+		}else if(get_cookie('nps_cookie_'.$key)){
+			$logged = $ci->users->login(['cookie_user'=>get_cookie('nps_cookie_'.$key)],$admin,true);
+			return $logged;
 		}
 		return FALSE;
 	}

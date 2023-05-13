@@ -22,20 +22,41 @@ class Users_model extends MY_Model
 		parent::__construct();
 	}
 
-	public function login($data,$admin = false){
+	public function login($data,$admin = false,$from_cookie = false){
 		if(!isset($data['login']) || !isset($data['password'])){
-			return false;
+			if(!$from_cookie){
+				ethernal_log('ETH','não enviado login ou senha');
+				return false;
+			}
+			
 		}
-		$results = $this->get_all([
-			'where' => [
-				'user.admin' => $admin ? '1' : '0',
-				'user.login' => $data['login']
-			]
-			]);
+		
+		if($from_cookie){
+			$payload = [
+				'where' => [
+					'user.admin' => $admin ? '1' : '0',
+					'md5(user.id_user)' => $data['cookie_user']
+				]
+			];
+		}else{
+			$password = md5($data['password']);
+			$payload = [
+				'where' => [
+					'user.admin' => $admin ? '1' : '0',
+					'user.login' => $data['login']
+				]
+			];
+		}
+		$results = $this->get_all($payload);
 		if($results){
 			$result = $results[0];
-			if(password_verify(md5($data['password']),$result['password'])){
-				unset($result['password']);
+
+			if($from_cookie || password_verify($password,$result['password'])){
+				set_cookie('nps_cookie_'.($admin ? 'admin' : 'user'),md5($result['id_user']),time() + (10 * 365 * 24 * 60 * 60));
+				$this->update($result['id_user'],[
+					'last_login' => date('Y-m-d H:i:s')
+				]);
+				// unset($result['password']);
 				if($admin){
 					$key = 'admin';
 				}else{
@@ -50,7 +71,11 @@ class Users_model extends MY_Model
 				]);
 
 				return TRUE;
+			}else{
+				ethernal_log('ETH','senha inválida',json_encode(['senha_enviada'=>md5($data['password']),'senha_banco'=>$result['password']]));
 			}
+		}else{
+			ethernal_log('ETH','Não encontrado');
 		}
 
 		return false;

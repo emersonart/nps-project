@@ -1,0 +1,41 @@
+body{
+	height: 100vh!important;
+	background: rgba(0,0,0,.2);
+}
+body > div{
+	height: 100vh!important;
+}
+
+.container-itens-ans{
+	background-color: white;
+	filter: drop-shadow(0px 0px 5px rgba(0,0,0,.2));
+	margin:0;
+	padding: 1.5rem .5rem;
+	border-radius: 10px;
+}
+.card, .card-title, .card-footer, .card-body {
+	border: 0;
+	background: transparent;
+}
+.card{
+	/* padding: 2em; */
+	text-align: center;
+	font-weight: bold;
+	font-size: 1rem;
+	cursor: pointer;
+	
+}
+.card:focus, .card:hover{
+	background: lightgray;
+}
+@media screen and (max-width: 768px){
+	.card{
+		padding: 0rem;
+	}
+}
+@media screen and (min-width: 768px){
+	.card{
+		min-height: 30vh;
+		padding: 1.1rem;
+	}
+}

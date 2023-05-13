@@ -32,20 +32,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<div class="app-auth-body mx-auto">
 					<div class="app-auth-branding mb-4"><a class="app-logo" href="<?=base_url()?>"><img class="logo-icon me-2" src="<?=base_url('assets/images/app-logo.svg')?>" alt="logo"></a></div>
 					<h2 class="auth-heading text-center mb-5">Acessar com tablet</h2>
+					<?=get_msg()?>
 					<div class="auth-form-container text-start">
-						<form class="auth-form login-form">
+						<?=form_open('',['class'=>"auth-form login-form"])?>
 							<div class="email mb-3">
-								<label class="sr-only" for="signin-email">Login</label>
-								<input id="signin-email" name="signin-email" type="email" class="form-control signin-email" placeholder="Email address" required="required">
+								<label class="sr-only" for="signin-login">Login</label>
+								<input id="signin-login" name="login" type="text" class="form-control signin-email" placeholder="Login" required="required">
 							</div><!--//form-group-->
 							<div class="password mb-3">
 								<label class="sr-only" for="signin-password">Senha</label>
-								<input id="signin-password" name="signin-password" type="password" class="form-control signin-password" placeholder="Password" required="required">
+								<input id="signin-password" name="password" type="password" class="form-control signin-password" placeholder="Password" required="required">
 							</div><!--//form-group-->
 							<div class="text-center">
 								<button type="submit" class="btn app-btn-primary w-100 theme-btn mx-auto">Log In</button>
 							</div>
-						</form>
+							<?=form_close()?>
 					</div><!--//auth-form-container-->
 
 				</div><!--//auth-body-->

@@ -34,8 +34,7 @@ class Migration_Add_users extends CI_Migration
 				'null' => FALSE
 			),
 			'password' => array(
-				'type' => 'VARCHAR',
-				'constraint' => '255',
+				'type' => 'TEXT',
 				'null' => false
 			),
 			'active' => array(
