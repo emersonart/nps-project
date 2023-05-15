@@ -53,3 +53,5 @@ $route['default_controller'] = 'external';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['sair'] = 'external/logout';
+$route['panel/sair'] = 'panel/auth/logout';
+$route['panel/login'] = 'panel/auth/index';

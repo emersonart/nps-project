@@ -30,7 +30,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<div class="col-12 col-md-7 col-lg-6 auth-main-col text-center p-5">
 			<div class="d-flex flex-column align-content-end">
 				<div class="app-auth-body mx-auto">
-					<div class="app-auth-branding mb-4"><a class="app-logo" href="<?=base_url()?>"><img class="logo-icon me-2" src="<?=base_url('assets/images/app-logo.svg')?>" alt="logo"></a></div>
+					<div class="app-auth-branding mb-4"><a class="app-logo" href="<?=base_url()?>"><img class="logo-icon me-2" src="<?=base_url('assets/images/eth_logo.png')?>" alt="logo"></a></div>
 					<h2 class="auth-heading text-center mb-5">Acessar com tablet</h2>
 					<?=get_msg()?>
 					<div class="auth-form-container text-start">
@@ -41,10 +41,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							</div><!--//form-group-->
 							<div class="password mb-3">
 								<label class="sr-only" for="signin-password">Senha</label>
-								<input id="signin-password" name="password" type="password" class="form-control signin-password" placeholder="Password" required="required">
+								<input id="signin-password" name="password" type="password" class="form-control signin-password" placeholder="Senha" required="required">
 							</div><!--//form-group-->
 							<div class="text-center">
-								<button type="submit" class="btn app-btn-primary w-100 theme-btn mx-auto">Log In</button>
+								<button type="submit" class="btn app-btn-primary w-100 theme-btn mx-auto">Iniciar atendimentos</button>
 							</div>
 							<?=form_close()?>
 					</div><!--//auth-form-container-->
@@ -54,7 +54,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<footer class="app-auth-footer">
 					<div class="container text-center py-3">
 						<!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
-						<small class="copyright">Designed with <span class="sr-only">love</span><i class="fas fa-heart" style="color: #fb866a;"></i> by <a class="app-link" href="http://themes.3rdwavemedia.com" target="_blank">Xiaoying Riley</a> for developers and customized by Emerson Bruno.</small>
+						<small class="copyright">Customized by Emerson Bruno.</small>
 
 					</div>
 				</footer><!--//app-auth-footer-->

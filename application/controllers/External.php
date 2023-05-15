@@ -17,10 +17,11 @@ class External extends MY_Controller
 	public function logout(){
 		$this->session->unset_userdata('user');
 		set_cookie('nps_cookie_user','',time() - (10 * 365 * 24 * 60 * 60));
+		set_msg('Deslogado com sucesso', 'success');
 		redirect('/');
 	}
 
-	public function answer(){
+	public function answer($type ='service'){
 		$this->load->model('Answers_model','answers');
 		$json_return = [
 			'error' => 1,
@@ -37,14 +38,15 @@ class External extends MY_Controller
 					$data = [
 						'id_user' => $this->session->user['id_user'],
 						'id_company' => $this->session->user['id_company'],
-						'value' => $payload['answer']
+						'value' => $payload['answer'],
+						'id_type' => $type == 'service' ? 1 : 2
 					];
 
 					$completed = $this->answers->insert($data);
 					if($completed){
 						$json_return = [
 							'error' => false,
-							'msg' => 'Obrigado pela sua avaliação!'
+							'msg' => 'Agradecemos sua avaliação!'
 						];
 					}else{
 						$json_return['error'] = 3;
@@ -86,6 +88,11 @@ class External extends MY_Controller
 			}
 			$this->load->view('external/login',['title'=>'NPS: Iniciar sessão']);
 		}
+	}
+
+	public function test(){
+		$this->load->model('Answers_model','answers');
+		echo $this->answers->get_average_by_range('2023-05-10','2023-05-14',2);
 	}
 
 }

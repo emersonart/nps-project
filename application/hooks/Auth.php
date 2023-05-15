@@ -6,13 +6,14 @@ class Authenticated_check
 {
 	public function verify(){
 		$ci =& get_instance();
-		if((isset($ci->uri->segments[1]) && $ci->uri->segments[1] == 'painel')){
+		if((isset($ci->uri->segments[1]) && $ci->uri->segments[1] == 'panel')){
 
 			if(ENVIRONMENT === 'development'){
 				$infos = [
 					'id_user' => 1,
 					'name' => 'Adminsitrador',
-					'logged' => true
+					'logged' => true,
+					'id_company' => 1
 				];
 				$ci->session->set_userdata('admin',$infos);
 			}
@@ -25,7 +26,7 @@ class Authenticated_check
 				){
 					
 				}else{
-					redirect('login');
+					redirect('panel/login');
 				}
 				
 			}
