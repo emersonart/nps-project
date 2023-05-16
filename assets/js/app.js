@@ -72,25 +72,47 @@ sidePanelDrop.addEventListener('click', (e) => {
 
 
 /* ====== Mobile search ======= */
-const searchMobileTrigger = document.querySelector('.search-mobile-trigger');
-const searchBox = document.querySelector('.app-search-box');
+// const searchMobileTrigger = document.querySelector('.search-mobile-trigger');
+// const searchBox = document.querySelector('.app-search-box');
 
-searchMobileTrigger.addEventListener('click', () => {
+// searchMobileTrigger.addEventListener('click', () => {
 
-	searchBox.classList.toggle('is-visible');
+// 	searchBox.classList.toggle('is-visible');
 	
-	let searchMobileTriggerIcon = document.querySelector('.search-mobile-trigger-icon');
+// 	let searchMobileTriggerIcon = document.querySelector('.search-mobile-trigger-icon');
 	
-	if(searchMobileTriggerIcon.classList.contains('fa-search')) {
-		searchMobileTriggerIcon.classList.remove('fa-search');
-		searchMobileTriggerIcon.classList.add('fa-times');
-	} else {
-		searchMobileTriggerIcon.classList.remove('fa-times');
-		searchMobileTriggerIcon.classList.add('fa-search');
-	}
+// 	if(searchMobileTriggerIcon.classList.contains('fa-search')) {
+// 		searchMobileTriggerIcon.classList.remove('fa-search');
+// 		searchMobileTriggerIcon.classList.add('fa-times');
+// 	} else {
+// 		searchMobileTriggerIcon.classList.remove('fa-times');
+// 		searchMobileTriggerIcon.classList.add('fa-search');
+// 	}
 	
 		
 	
-});
+// });
 
 
+function dowloadDataChart(elem){
+	const element = document.querySelector(elem); 
+	html2canvas(document.querySelector(elem), {
+    onrendered: function (canvas) {
+			var wid;
+      var hgt;
+      var img = canvas.toDataURL('image/png',wid = canvas.width,hgt = canvas.height ); //image data of canvas
+			var hratio = hgt/wid
+			console.log(hratio)
+			var doc = new jsPDF({
+				orientation: 'landscape'
+			});
+			console.log(doc)
+
+      var width = doc.internal.pageSize.width - 40;    
+      var height = width * hratio
+
+      doc.addImage(img,'JPEG',20,20, width, height);
+      doc.save((element?.dataset?.filename ? element.dataset.filename : 'file') + '.pdf');
+    }
+  });
+}

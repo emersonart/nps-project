@@ -98,6 +98,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 		modalResponse.show();
 		setTimeout(() => {
 			modalResponse.hide();
-		}, 5000);
+		}, 2000);
 	}
 })

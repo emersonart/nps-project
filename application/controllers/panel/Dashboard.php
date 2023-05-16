@@ -13,9 +13,23 @@ class Dashboard extends MY_Controller
 	}
 
 	public function index(){
-		if($this->input->get('init_date') && $this->input->get('end_date') && strtotime($this->input->get('init_date')) <= strtotime($this->input->get('end_date'))){
-			$dInit = new DateTime(date($this->input->get('init_date') ));
-			$dEnd = new DateTime(date($this->input->get('end_date')));
+		$get_init_date = $this->input->get('init_date');
+		$get_end_date = $this->input->get('end_date');
+		
+		// die();
+		if($get_init_date && strpos($get_init_date,'/') !== false){
+			list($gid,$gim,$giy) = explode('/',$get_init_date);
+			$get_init_date = $giy."-".$gim."-".$gid;
+		}
+		if($get_end_date && strpos($get_end_date,'/') !== false){
+			list($ged,$gem,$gey) = explode('/',$get_end_date);
+			$get_end_date = $gey."-".$gem."-".$ged;
+		}
+
+		
+		if($get_init_date && $get_end_date && strtotime($get_init_date) <= strtotime($get_end_date)){
+			$dInit = new DateTime(date($get_init_date ));
+			$dEnd = new DateTime(date($get_end_date));
 			$diffDay = $dInit->diff($dEnd)->format('%a');
 
 			
@@ -26,8 +40,8 @@ class Dashboard extends MY_Controller
 		}else{
 			$dEnd = new DateTime(date('Y-m-d'));
 			$dInit = new DateTime($dEnd->format('Y-m-d'));
-			$dInit->sub(new DateInterval('P30D'));
-			$diffDay = 30;
+			$dInit->sub(new DateInterval('P7D'));
+			$diffDay = 7;
 
 			$init_date = $dInit->format('Y-m-d');
 			$end_date = $dEnd->format('Y-m-d');
@@ -43,7 +57,7 @@ class Dashboard extends MY_Controller
 		$past_init_date = $dInitPast->format('Y-m-d');
 		$past_end_date = $dEndPast->format('Y-m-d');
 
-
+		$select_answers = 'ans.*,typ.type,user.name';
 
 		$users = $this->users->get_all([
 			'where' => [
@@ -52,12 +66,17 @@ class Dashboard extends MY_Controller
 			]
 		]);
 		$answers = $this->answers->get_all([
+			'select' => $select_answers,
+			'order_by' => [
+				'ans.id_answer' => 'desc'
+			],
 			'where' => [
 				'ans.id_company' => $this->admin['id_company'],
 				'DATE(ans.created_at) >='=>$init_date,
 				'DATE(ans.created_at) <='=>$end_date,
 				'ans.id_type' => 1
-			]
+			],
+			'get_related' => true
 		]);
 		$answers_past = $this->answers->get_all([
 			'where' => [
@@ -69,12 +88,17 @@ class Dashboard extends MY_Controller
 		]);
 		
 		$answers_food = $this->answers->get_all([
+			'select' => $select_answers,
+			'order_by' => [
+				'ans.id_answer' => 'desc'
+			],
 			'where' => [
 				'ans.id_company' => $this->admin['id_company'],
 				'DATE(ans.created_at) >='=>$init_date,
 				'DATE(ans.created_at) <='=>$end_date,
 				'ans.id_type' => 2
-			]
+			],
+			'get_related' => true
 		]);
 
 		$answers_food_past = $this->answers->get_all([
@@ -96,14 +120,42 @@ class Dashboard extends MY_Controller
 
 		if($users){
 			foreach($users as $k => $user){
-				$users[$k]['answers'] = $this->answers->get_all([
+				$ur_answers = $this->answers->get_all([
 					'where' => [
 						'ans.id_company' => $this->admin['id_company'],
 						'ans.id_user' => $user['id_user'],
 						'DATE(ans.created_at) >='=>$init_date,
 						'DATE(ans.created_at) <='=>$end_date,
+						'ans.id_type' => 1
 					]
 				]);
+
+				$ur_answers = $ur_answers ? $ur_answers : [];
+				$ur_answers_average = array_reduce($ur_answers,function ($carry,$item) {
+					$carry += $item['value'];
+					return $carry;
+				} ,0);
+				$ur_answers_average = $ur_answers_average ? round($ur_answers_average / count($ur_answers),1) : 0;
+				$users[$k]['answers_average'] = $ur_answers_average;
+				$users[$k]['answers'] = $ur_answers;
+
+				$ur_answers_food = $this->answers->get_all([
+					'where' => [
+						'ans.id_company' => $this->admin['id_company'],
+						'ans.id_user' => $user['id_user'],
+						'DATE(ans.created_at) >='=>$init_date,
+						'DATE(ans.created_at) <='=>$end_date,
+						'ans.id_type' => 2
+					]
+				]);
+				$ur_answers_food = $ur_answers_food ? $ur_answers_food : [];
+				$ur_answers_food_average = array_reduce($ur_answers_food,function ($carry,$item){
+					$carry += $item['value'];
+					return $carry;
+				} ,0);
+				$ur_answers_food_average = $ur_answers_food_average ? round($ur_answers_food_average / count($ur_answers_food),1) : 0;
+				$users[$k]['answers_food_average'] = $ur_answers_food_average;
+				$users[$k]['answers_food'] = $ur_answers_food;
 			}
 		}
 		

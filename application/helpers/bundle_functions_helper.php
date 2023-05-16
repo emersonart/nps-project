@@ -20,7 +20,7 @@ if (!function_exists('load_template')) {
 				break;
 
 			default:
-				$data['auth_user'] = $ci->session->logged;
+				$data['auth_user'] = $ci->session->admin;
 				$ci->load->view('templates/panel/header', $data);
 				$ci->load->view('panel/' . $template);
 				$ci->load->view('templates/panel/footer');

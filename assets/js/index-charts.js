@@ -49,7 +49,7 @@ var lineChartConfig = {
 
 		title: {
 			display: true,
-			text: 'Quantidade de avaliações por dia',
+			text: 'Quantidade de avaliações por dia ('+document.getElementById('canvas-linechart').dataset?.initDate?.split('_').join('/')+' à ' + document.getElementById('canvas-linechart').dataset?.endDate?.split('_').join('/') + ')',
 
 		},
 		tooltips: {
@@ -66,6 +66,7 @@ var lineChartConfig = {
 			titleFontColor: window.chartColors.text,
 
 			callbacks: {
+				
 				//Ref: https://stackoverflow.com/questions/38800226/chart-js-add-commas-to-tooltip-and-y-axis
 				label: function (tooltipItem, data) {
 					if (parseInt(tooltipItem.value) >= 1000) {
@@ -73,7 +74,10 @@ var lineChartConfig = {
 					} else {
 						return tooltipItem.value;
 					}
-				}
+				},
+				title: function(){
+					console.log('teste')
+				},
 			},
 
 		},
@@ -197,11 +201,35 @@ var barChartConfig = {
 // Generate charts on load
 window.addEventListener('load', function () {
 
-	var lineChart = document.getElementById('canvas-linechart').getContext('2d');
-	window.myLine = new Chart(lineChart, lineChartConfig);
+	var lineChart = document.getElementById('canvas-linechart')?.getContext('2d');
+	if(lineChart){
+		window.myLine = new Chart(lineChart, lineChartConfig);
+	}
+	
 
-	var barChart = document.getElementById('canvas-barchart').getContext('2d');
-	window.myBar = new Chart(barChart, barChartConfig);
+	var barChart = document.getElementById('canvas-barchart')?.getContext('2d');
+	if(barChart){
+		window.myBar = new Chart(barChart, barChartConfig);
+	}
+	
+
+	var date_filter = document.getElementById('filter_range');
+	console.log(date_filter);
+	if (date_filter) {
+		const datepickerFilter = new DateRangePicker(date_filter, {
+			buttonClass: 'btn',
+			language: 'pt-BR',
+			maxDate: new Date(),
+			minDays: 3,
+    maxDays: 7,
+
+			changeDate: function(){
+				console.log('change date')
+			}
+		
+		});
+
+	}
 
 
 });

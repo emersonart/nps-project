@@ -1,51 +1,42 @@
-/* globals Chart:false, feather:false */
+$(document).ready(()=>{
+	const table1 = $('#table_answers')
+	if(table1.length){
+		console.log(base_url + 'assets/plugins/DataTables/i18n/pt-br.js');
+		table1.DataTable({
+			dom: 'Bfrtip',
+			language: {
+				url: base_url + 'assets/plugins/DataTables/i18n/pt-br.js'
+			},
+			"order": [[ 0, 'desc' ]],
+			buttons: [
+				'copyHtml5',
+				{
+					extend: 'excelHtml5',
+					filename: 'avaliacoes_'+table1.data('initDate')+'_ate_'+table1.data('endDate')+'_'+(new Date().getTime()),
+					title: `Avaliações: ${table1.data('initDate').split('_').join('/')} até ${table1.data('endDate').split('_').join('/')}`,
+					exportOptions: {
+						columns: [0,1,2,3,4]
+					}
+				},
+				{
+					extend: 'csvHtml5',
+					filename: 'avaliacoes_'+table1.data('initDate')+'_ate_'+table1.data('endDate')+'_'+(new Date().getTime()),
+					title: `Avaliações: ${table1.data('initDate').split('_').join('/')} até ${table1.data('endDate').split('_').join('/')}`,
+					exportOptions: {
+						columns: [0,1,2,3,4]
+					}
+				},
+				{
+					extend: 'pdfHtml5',
+					filename: 'avaliacoes_'+table1.data('initDate')+'_ate_'+table1.data('endDate')+'_'+(new Date().getTime()),
+					title: `Avaliações: ${table1.data('initDate').split('_').join('/')} até ${table1.data('endDate').split('_').join('/')}`,
+					exportOptions: {
+						columns: [0,1,2,3,4]
+					}
+				},
+			]
+		});
+	}
+	
 
-(() => {
-  'use strict'
-
-  feather.replace({ 'aria-hidden': 'true' })
-
-  // Graphs
-  const ctx = document.getElementById('myChart')
-  // eslint-disable-next-line no-unused-vars
-  const myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
-      ],
-      datasets: [{
-        data: [
-          15339,
-          21345,
-          18483,
-          24003,
-          23489,
-          24092,
-          12034
-        ],
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#007bff',
-        borderWidth: 4,
-        pointBackgroundColor: '#007bff'
-      }]
-    },
-    options: {
-      plugins: {
-        legend: {
-          display: false
-        },
-        tooltip: {
-          boxPadding: 3
-        }
-      }
-    }
-  })
-})()
+})

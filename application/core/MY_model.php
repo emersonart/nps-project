@@ -44,7 +44,7 @@ class MY_Model extends CI_Model
 		return $result;
 	}
 
-	public function get_all($params = array())
+	public function get_all($params = array(), $deleted = false)
 	{
 		$where = isset($params['where']) ? $params['where'] : [];
 		$or_where = isset($params['or_where']) ? $params['or_where'] : [];
@@ -52,24 +52,31 @@ class MY_Model extends CI_Model
 		$offset = isset($params['offset']) ? $params['offset'] : null;
 		$order_by = isset($params['order_by']) ? $params['order_by'] : null;
 		$select = isset($params['select']) ? $params['select'] : '*';
+		$get_related = isset($params['get_related']) ? $params['get_related'] : false;
 
 		// Define o SELECT padrão para a tabela principal
 		$this->db->select($select ?: $this->alias . '.*');
+		if (!$deleted) {
+			$this->db->group_start();
+			$this->db->or_where($this->alias . "." . $this->deleted_field, '0000-00-00 00:00:00');
+			$this->db->or_where($this->alias . "." . $this->deleted_field, '');
+			$this->db->or_where($this->alias . "." . $this->deleted_field . " IS NULL", '', FALSE);
+			$this->db->group_end();
+		}
 
 		// Define o WHERE para a tabela principal
 		if ($where) {
 			foreach ($where as $key => $value) {
-				
+
 				if (is_array($value)) {
 
 					foreach ($value as $operator => $val) {
-						$this->db->where( $key . ' ' . $operator, $val);
+						$this->db->where($key . ' ' . $operator, $val);
 					}
 				} else {
 
-					$this->db->where( $key, $value);
+					$this->db->where($key, $value);
 				}
-				
 			}
 		}
 
@@ -77,17 +84,16 @@ class MY_Model extends CI_Model
 		if ($or_where) {
 			$this->db->group_start();
 			foreach ($or_where as $key => $value) {
-				
+
 				if (is_array($value)) {
 
 					foreach ($value as $operator => $val) {
-						$this->db->or_where( $key . ' ' . $operator, $val);
+						$this->db->or_where($key . ' ' . $operator, $val);
 					}
 				} else {
 
-					$this->db->where( $key, $value);
+					$this->db->where($key, $value);
 				}
-				
 			}
 			$this->db->group_end();
 		}
@@ -96,7 +102,7 @@ class MY_Model extends CI_Model
 		if (!empty($order_by)) {
 			if (is_array($order_by)) {
 				foreach ($order_by as $column => $direction) {
-					$this->db->order_by($this->table . '.' . $column, $direction);
+					$this->db->order_by( $column, $direction);
 				}
 			} else {
 				$this->db->order_by($order_by);
@@ -107,10 +113,10 @@ class MY_Model extends CI_Model
 		if (!empty($limit)) {
 			$this->db->limit($limit, $offset ?: 0);
 		}
+		if ($get_related) {
+			foreach ($this->has_many as $table => $options) {
 
-		foreach ($this->has_many as $table => $options) {
-			if ($options['get_relate']) {
-				$this->db->join($table . " " . $options['alias'], $options['alias'] . "." . $options['foreign_key'] . " = " . $this->alias . "." . $this->primaryKey, $options['relationship']);
+				$this->db->join($table . " " . $options['alias'], $options['alias'] . "." . $options['primary_key'] . " = " . $this->alias . "." . $options['foreign_key'], $options['relationship']);
 			}
 		}
 
