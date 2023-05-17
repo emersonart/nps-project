@@ -93,7 +93,6 @@ sidePanelDrop.addEventListener('click', (e) => {
 	
 // });
 
-
 function dowloadDataChart(elem){
 	const element = document.querySelector(elem); 
 	html2canvas(document.querySelector(elem), {

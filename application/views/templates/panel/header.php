@@ -43,7 +43,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								</svg>
 							</a>
 						</div><!--//col-->
-
+						<div class="col">
+							<p class="pt-1">
+								Url para acesso: <b><?=filter_var($_SERVER['HTTP_HOST'], FILTER_VALIDATE_IP) ? 'http://'.$this->config->item('publicIpUrl') : base_url();?></b>
+							</p>
+						</div>
 						<div class="app-utilities col-auto">
 
 							<div class="app-utility-item app-user-dropdown dropdown">
@@ -67,7 +71,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	    
 	    <div class="app-content pt-3 p-md-3 p-lg-4">
 		    <div class="container-xl">
-			    
+			    <?=get_msg()?>
 					<h1 class="app-page-title"><?=$heading?></h1>
 
 

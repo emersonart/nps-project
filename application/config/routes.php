@@ -55,3 +55,4 @@ $route['translate_uri_dashes'] = FALSE;
 $route['sair'] = 'external/logout';
 $route['panel/sair'] = 'panel/auth/logout';
 $route['panel/login'] = 'panel/auth/index';
+$route['panel'] = 'panel/dashboard';

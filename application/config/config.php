@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 date_default_timezone_set('America/Recife');
+
+$config['publicIpUrl'] = gethostbyname(gethostname()).'/'.basename(dirname(realpath(APPPATH)));
 /*
 |--------------------------------------------------------------------------
 | Base Site URL

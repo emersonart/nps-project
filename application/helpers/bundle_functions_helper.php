@@ -5,6 +5,9 @@ if (!function_exists('load_template')) {
 	function load_template($data, $template, $type = 'painel')
 	{
 		$ci = &get_instance();
+		if(!isset($data['active_menu'])){
+			$data['active_menu'] = '';
+		}
 		if (!isset($data['title'])) {
 			$data['title'] = ENVIRONMENT != 'production' ? gethostbyname(gethostname()) : SITE_NAME;
 		} else {
@@ -107,7 +110,16 @@ if (!function_exists('is_authenticated')) {
 		$ci = &get_instance();
 		$key = $admin ? 'admin' : 'user';
 		if ($ci->session->userdata($key) && $ci->session->userdata($key)['logged']) {
+			$dt = $ci->session->userdata($key);
+			if(!isset($dt['last_login']) || date('Y-m-d',strtotime($dt['last_login'])) != date('Y-m-d')){
+				$last_login = date('Y-m-d H:i:s');
+				$ci->users->update($dt['id_user'],[
+					'last_login' => $last_login
+				]);
+				$dt['last_login'] = $last_login;
 
+				$ci->session->set_userdata($key,$dt);
+			}
 			return TRUE;
 		}else if(get_cookie('nps_cookie_'.$key)){
 			$logged = $ci->users->login(['cookie_user'=>get_cookie('nps_cookie_'.$key)],$admin,true);

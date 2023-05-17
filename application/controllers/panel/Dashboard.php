@@ -65,6 +65,28 @@ class Dashboard extends MY_Controller
 				'admin' => 0
 			]
 		]);
+		$answers_avg_all = $this->answers->get_all([
+			'select' => 'AVG(value) average',
+			'where' => [
+				'ans.id_company' => $this->admin['id_company'],
+				'ans.id_type' => 1
+			],
+			'group_by' => [
+				'ans.id_company' => $this->admin['id_company']
+			]
+		]);
+		$answers_avg_all = $answers_avg_all ? round($answers_avg_all[0]['average'],1) : 0;
+		$answers_food_avg_all = $this->answers->get_all([
+			'select' => 'AVG(value) average',
+			'where' => [
+				'ans.id_company' => $this->admin['id_company'],
+				'ans.id_type' => 2
+			],
+			'group_by' => [
+				'ans.id_company' => $this->admin['id_company']
+			]
+		]);
+		$answers_food_avg_all = $answers_food_avg_all ? round($answers_food_avg_all[0]['average'],1) : 0;
 		$answers = $this->answers->get_all([
 			'select' => $select_answers,
 			'order_by' => [
@@ -277,7 +299,10 @@ class Dashboard extends MY_Controller
 			'average_food_past' => $average_food_past,
 			'answers_by_day' => $answers_by_day,
 			'answers_food_by_day' => $answers_food_by_day,
-			'arrayLabelsLineChart' => $arrayLabelsLineChart
+			'arrayLabelsLineChart' => $arrayLabelsLineChart,
+			'answers_food_avg_all' => $answers_food_avg_all,
+			'answers_avg_all' => $answers_avg_all,
+			'active_menu' => 'panel/dashboard'
 		];
 
 		load_template($data,'dashboard','panel');

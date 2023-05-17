@@ -9,6 +9,7 @@ class Users_model extends MY_Model
 		'name',
 		'id_company',
 		'password',
+		'login',
 		'admin',
 		'active',
 		'updated_at',
@@ -53,8 +54,10 @@ class Users_model extends MY_Model
 
 			if($from_cookie || password_verify($password,$result['password'])){
 				set_cookie('nps_cookie_'.($admin ? 'admin' : 'user'),md5($result['id_user']),time() + (10 * 365 * 24 * 60 * 60));
+
+				$last_login = date('Y-m-d H:i:s');
 				$this->update($result['id_user'],[
-					'last_login' => date('Y-m-d H:i:s')
+					'last_login' => $last_login
 				]);
 				// unset($result['password']);
 				if($admin){
@@ -67,7 +70,8 @@ class Users_model extends MY_Model
 					'logged' => true,
 					'name' => $result['name'],
 					'id_company' => $result['id_company'],
-					'id_user' => $result['id_user']
+					'id_user' => $result['id_user'],
+					'last_login' => $last_login
 				]);
 
 				return TRUE;
